@@ -1,6 +1,8 @@
 package ru.sumin.coroutinestart
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -37,19 +39,25 @@ class MainActivity : AppCompatActivity() {
     private fun loadCity(callback: (String) -> Unit) {
         thread {
             Thread.sleep(5000)
-            callback("Kyiv")
+            runOnUiThread {
+                callback("Kyiv")
+            }
         }
     }
 
     private fun loadTemperature(city: String, callback: (Int) -> Unit) {
-        Toast.makeText(
-            this,
-            getString(R.string.loading_temperature_toast, city),
-            Toast.LENGTH_SHORT
-        ).show()
         thread {
+            runOnUiThread {
+                Toast.makeText(
+                    this,
+                    getString(R.string.loading_temperature_toast, city),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             Thread.sleep(5000)
-            callback(17)
+            runOnUiThread {
+                callback(17)
+            }
         }
     }
 }
